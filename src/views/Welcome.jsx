@@ -12,7 +12,7 @@ const Welcome = () => {
 
     const handleWeatherFetch = async () => {
         try {
-            const apiKey = 'VOTRE_API_KEY'; // Remplacez par votre clé API de l'API météo
+            const apiKey = 'ee5e0f4ea27e4f45b00160822242208'; // Remplacez par votre clé API de l'API météo
             const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=1`);
             setWeather(response.data);
             setError('');
@@ -26,7 +26,7 @@ const Welcome = () => {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
                 try {
-                    const apiKey = 'VOTRE_API_KEY'; // Remplacez par votre clé API de l'API météo
+                    const apiKey = 'ee5e0f4ea27e4f45b00160822242208'; // Remplacez par votre clé API de l'API météo
                     const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${latitude},${longitude}&days=1`);
                     setWeather(response.data);
                     setError('');
