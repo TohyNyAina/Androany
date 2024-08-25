@@ -42,7 +42,7 @@ const Welcome = () => {
     const handleWeatherFetch = async () => {
         try {
             const apiKey = 'ee5e0f4ea27e4f45b00160822242208'; // Remplacez par votre clé API de l'API météo
-            const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=1`);
+            const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=1&lang=fr`);
             setWeather(response.data);
             setError('');
             setIsOpen(true);
@@ -57,7 +57,7 @@ const Welcome = () => {
                 const { latitude, longitude } = position.coords;
                 try {
                     const apiKey = 'ee5e0f4ea27e4f45b00160822242208'; // Remplacez par votre clé API de l'API météo
-                    const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${latitude},${longitude}&days=1`);
+                    const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${latitude},${longitude}&days=1&lang=fr`);
                     setWeather(response.data);
                     setError('');
                     setIsOpen(true);
@@ -76,22 +76,22 @@ const Welcome = () => {
         if (temp < 10) {
             return {
                 text: "Portez un manteau chaud et des gants.",
-                image: "https://images.unsplash.com/photo-1519904981051-78a953d17247?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+                image: "/images/manteau_chaud.jpg" // Chemin vers l'image locale du manteau chaud
             };
         } else if (temp < 20) {
             return {
                 text: "Une veste légère devrait suffire.",
-                image: "https://images.unsplash.com/photo-1531394933403-7a3c60d09e1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+                image: "/images/veste_legere.jpg" // Chemin vers l'image locale de la veste légère
             };
         } else if (temp < 30) {
             return {
                 text: "Un t-shirt et un jean sont recommandés.",
-                image: "https://images.unsplash.com/photo-1524253482453-3fed8d2fe12b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+                image: "/images/tshirt_jean.jpg" // Chemin vers l'image locale du t-shirt et jean
             };
         } else {
             return {
                 text: "Il fait chaud, optez pour des vêtements légers comme un short et un t-shirt.",
-                image: "https://images.unsplash.com/photo-1520975916747-7bcd16bd0407?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"
+                image: "/images/short_tshirt.jpg" // Chemin vers l'image locale du short et t-shirt
             };
         }
     };
@@ -158,22 +158,15 @@ const Welcome = () => {
                             </div>
                             <p>Température: {weather.current.temp_c}°C</p>
                             <div className="mt-4">
-                                {/* Obtenir le texte et l'image correspondants */}
-                                {(() => {
-                                    const { text, image } = suggestClothingAndImage(weather.current.temp_c);
-                                    return (
-                                        <>
-                                            <p>{text}</p>
-                                            <img src={image} alt="Recommandation de vêtements" className="mt-2 w-32 h-32" />
-                                        </>
-                                    );
-                                })()}
+                                <p>{suggestClothingAndImage(weather.current.temp_c).text}</p>
+                                <img 
+                                    src={suggestClothingAndImage(weather.current.temp_c).image} 
+                                    alt="Vêtements recommandés"
+                                    className="w-full h-auto mt-4"
+                                />
                             </div>
                         </motion.div>
                     )}
-                    <button onClick={() => setIsOpen(false)} className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-300">
-                        Fermer
-                    </button>
                 </Modal>
             </div>
         </div>
