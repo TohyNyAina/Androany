@@ -22,7 +22,7 @@ const Welcome = () => {
     const [error, setError] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [modalIsOpen, setIsOpen] = useState(false);
-    const [loading, setLoading] = useState(false); // Nouvel état pour le chargement
+    const [loading, setLoading] = useState(false); 
 
     const handleLocationInput = async (e) => {
         const value = e.target.value;
@@ -41,7 +41,7 @@ const Welcome = () => {
     };
 
     const handleWeatherFetch = async () => {
-        setLoading(true); // Démarrer le chargement
+        setLoading(true); 
         try {
             const apiKey = 'ee5e0f4ea27e4f45b00160822242208'; // Remplacez par votre clé API de l'API météo
             const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=1&lang=fr`);
@@ -51,13 +51,13 @@ const Welcome = () => {
         } catch (error) {
             setError('Impossible de récupérer la météo. Vérifiez votre entrée ou les autorisations GPS.');
         } finally {
-            setLoading(false); // Arrêter le chargement
+            setLoading(false); 
         }
     };
 
     const handleGeolocation = () => {
         if (navigator.geolocation) {
-            setLoading(true); // Démarrer le chargement
+            setLoading(true); 
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
                 try {
@@ -69,11 +69,11 @@ const Welcome = () => {
                 } catch (error) {
                     setError('Impossible de récupérer la météo. Vérifiez votre entrée ou les autorisations GPS.');
                 } finally {
-                    setLoading(false); // Arrêter le chargement
+                    setLoading(false); 
                 }
             }, () => {
                 setError('Impossible de récupérer votre position.');
-                setLoading(false); // Arrêter le chargement
+                setLoading(false); 
             });
         } else {
             setError('La géolocalisation n\'est pas supportée par votre navigateur.');
@@ -84,22 +84,22 @@ const Welcome = () => {
         if (temp < 10) {
             return {
                 text: "Portez un manteau chaud et des gants.",
-                image: "/img/veste chaud.jpg" // Chemin vers l'image locale du manteau chaud
+                image: "/img/veste chaud.jpg" 
             };
         } else if (temp < 20) {
             return {
                 text: "Une veste légère devrait suffire.",
-                image: "/img/veste legere.jpg" // Chemin vers l'image locale de la veste légère
+                image: "/img/veste legere.jpg" 
             };
         } else if (temp < 30) {
             return {
                 text: "Un t-shirt et un jean sont recommandés.",
-                image: "/img/tee-shirt.jpg" // Chemin vers l'image locale du t-shirt et jean
+                image: "/img/tee-shirt.jpg" 
             };
         } else {
             return {
                 text: "Il fait chaud, optez pour des vêtements légers comme un short et un t-shirt.",
-                image: "/img/short.jpg" // Chemin vers l'image locale du short et t-shirt
+                image: "/img/short.jpg" 
             };
         }
     };
@@ -147,7 +147,7 @@ const Welcome = () => {
                 </button>
                 {error && <p className="text-red-500 mt-4">{error}</p>}
                 
-                {loading && <p className="mt-4">Chargement...</p>} {/* Indicateur de chargement */}
+                {loading && <p className="mt-4">Chargement...</p>} 
 
                 <Modal
                     isOpen={modalIsOpen}
@@ -172,7 +172,7 @@ const Welcome = () => {
                                 <img 
                                     src={suggestClothingAndImage(weather.current.temp_c).image} 
                                     alt="Vêtements recommandés"
-                                    className="w-32 h-auto mt-4" // Ajuster la taille de l'image ici
+                                    className="w-32 h-auto mt-4" 
                                 />
                             </div>
                             <button 
