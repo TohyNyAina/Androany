@@ -22,6 +22,7 @@ const Welcome = () => {
     const [error, setError] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [modalIsOpen, setIsOpen] = useState(false);
+    const [loading, setLoading] = useState(false); // Nouvel état pour le chargement
 
     const handleLocationInput = async (e) => {
         const value = e.target.value;
@@ -40,6 +41,7 @@ const Welcome = () => {
     };
 
     const handleWeatherFetch = async () => {
+        setLoading(true); // Démarrer le chargement
         try {
             const apiKey = 'ee5e0f4ea27e4f45b00160822242208'; // Remplacez par votre clé API de l'API météo
             const response = await axios.get(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${location}&days=1&lang=fr`);
@@ -48,11 +50,14 @@ const Welcome = () => {
             setIsOpen(true);
         } catch (error) {
             setError('Impossible de récupérer la météo. Vérifiez votre entrée ou les autorisations GPS.');
+        } finally {
+            setLoading(false); // Arrêter le chargement
         }
     };
 
     const handleGeolocation = () => {
         if (navigator.geolocation) {
+            setLoading(true); // Démarrer le chargement
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
                 try {
@@ -63,9 +68,12 @@ const Welcome = () => {
                     setIsOpen(true);
                 } catch (error) {
                     setError('Impossible de récupérer la météo. Vérifiez votre entrée ou les autorisations GPS.');
+                } finally {
+                    setLoading(false); // Arrêter le chargement
                 }
             }, () => {
                 setError('Impossible de récupérer votre position.');
+                setLoading(false); // Arrêter le chargement
             });
         } else {
             setError('La géolocalisation n\'est pas supportée par votre navigateur.');
@@ -76,22 +84,22 @@ const Welcome = () => {
         if (temp < 10) {
             return {
                 text: "Portez un manteau chaud et des gants.",
-                image: "/images/manteau_chaud.jpg" // Chemin vers l'image locale du manteau chaud
+                image: "/img/veste chaud.jpg" // Chemin vers l'image locale du manteau chaud
             };
         } else if (temp < 20) {
             return {
                 text: "Une veste légère devrait suffire.",
-                image: "/images/veste_legere.jpg" // Chemin vers l'image locale de la veste légère
+                image: "/img/veste legere.jpg" // Chemin vers l'image locale de la veste légère
             };
         } else if (temp < 30) {
             return {
                 text: "Un t-shirt et un jean sont recommandés.",
-                image: "/images/tshirt_jean.jpg" // Chemin vers l'image locale du t-shirt et jean
+                image: "/img/tee-shirt.jpg" // Chemin vers l'image locale du t-shirt et jean
             };
         } else {
             return {
                 text: "Il fait chaud, optez pour des vêtements légers comme un short et un t-shirt.",
-                image: "/images/short_tshirt.jpg" // Chemin vers l'image locale du short et t-shirt
+                image: "/img/short.jpg" // Chemin vers l'image locale du short et t-shirt
             };
         }
     };
@@ -112,7 +120,7 @@ const Welcome = () => {
                         onClick={handleGeolocation} 
                         className="bg-green-500 text-white px-4 py-2 ml-2 rounded hover:bg-green-700 transition duration-300"
                     >
-                        📍
+                        Utiliser votre position
                     </button>
                 </div>
                 {suggestions.length > 0 && (
@@ -138,6 +146,8 @@ const Welcome = () => {
                     Vérifier la météo
                 </button>
                 {error && <p className="text-red-500 mt-4">{error}</p>}
+                
+                {loading && <p className="mt-4">Chargement...</p>} {/* Indicateur de chargement */}
 
                 <Modal
                     isOpen={modalIsOpen}
@@ -162,9 +172,15 @@ const Welcome = () => {
                                 <img 
                                     src={suggestClothingAndImage(weather.current.temp_c).image} 
                                     alt="Vêtements recommandés"
-                                    className="w-full h-auto mt-4"
+                                    className="w-32 h-auto mt-4" // Ajuster la taille de l'image ici
                                 />
                             </div>
+                            <button 
+                                onClick={() => setIsOpen(false)} 
+                                className="bg-red-500 text-white px-4 py-2 rounded mt-4 hover:bg-red-700 transition duration-300"
+                            >
+                                Fermer
+                            </button>
                         </motion.div>
                     )}
                 </Modal>
